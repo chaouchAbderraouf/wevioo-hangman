@@ -107,18 +107,6 @@ class GameController extends Controller
 
     private function getGameRunner()
     {
-        $wordlist = new WordList();
-
-        $wordlist->addLoader('txt', new TextFileLoader());
-        $wordlist->addLoader('xml', new XmlFileLoader());
-
-        $wordlist->loadDictionaries([
-            $this->getParameter('kernel.root_dir').'/Resources/data/words.txt',
-            $this->getParameter('kernel.root_dir').'/Resources/data/words.xml'
-        ]);
-
-        $gameContext = new GameContext($this->get('session'));
-
-        return new GameRunner($gameContext, $wordlist);
+        return $this->get('app.game_runner');
     }
 }

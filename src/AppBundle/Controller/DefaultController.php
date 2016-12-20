@@ -24,7 +24,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/hello/{name}", name="homepage")
+     * @Route("/hello/{name}", name="hello")
      * @Template
      */
     public function helloWorldAction($name)
@@ -43,8 +43,7 @@ class DefaultController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $contactService = new ContactService('adrien.lucas@sensiolabs.com', $this->get('mailer'));
-            $contactService->sendMail($contact);
+            $this->get('app.contact_service')->sendMail($contact);
 
             $this->addFlash('notice', 'Your request has been successfully sent.');
 

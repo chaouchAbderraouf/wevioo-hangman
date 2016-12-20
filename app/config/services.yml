@@ -1,9 +1,29 @@
-# Learn more about services, parameters and containers at
-# http://symfony.com/doc/current/book/service_container.html
-parameters:
-#    parameter_name: value
-
 services:
-#    service_name:
-#        class: AppBundle\Directory\ClassName
-#        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+    app.wordlist_loader.txt:
+        class: AppBundle\Game\Loader\TextFileLoader
+        public: false
+    app.wordlist_loader.xml:
+        class: AppBundle\Game\Loader\XmlFileLoader
+        public: false
+
+    app.wordlist:
+        class: AppBundle\Game\WordList
+        calls:
+            - [addLoader, ['txt', '@app.wordlist_loader.txt']]
+            - [addLoader, ['xml', '@app.wordlist_loader.xml']]
+            - [loadDictionaries, [['%kernel.root_dir%/Resources/data/words.txt', '%kernel.root_dir%/Resources/data/words.xml' ]]]
+        shared: false
+
+    app.game_context:
+        class: AppBundle\Game\GameContext
+        arguments: ['@session']
+
+    app.game_runner:
+        class: AppBundle\Game\GameRunner
+        arguments: ['@app.game_context', '@app.wordlist']
+
+    app.contact_service:
+        class: AppBundle\Service\ContactService
+        arguments: ['adrien.lucas@sensiolabs.com', '@mailer']
+        calls:
+            - [setLogger, ['@logger']]
