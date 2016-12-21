@@ -21,6 +21,7 @@ class WordList implements DictionaryLoaderInterface, WordListInterface
      */
     public function addLoader($type, LoaderInterface $loader)
     {
+        dump(get_class($loader));
         $this->loaders[strtolower($type)] = $loader;
     }
 

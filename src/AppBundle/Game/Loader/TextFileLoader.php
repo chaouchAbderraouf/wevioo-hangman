@@ -4,6 +4,7 @@ namespace AppBundle\Game\Loader;
 
 class TextFileLoader implements LoaderInterface
 {
+
     /**
      * @inheritdoc
      */

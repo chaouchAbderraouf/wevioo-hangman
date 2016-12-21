@@ -1,10 +1,12 @@
 services:
     app.wordlist_loader.txt:
         class: AppBundle\Game\Loader\TextFileLoader
-        public: false
+        lazy: true
+
     app.wordlist_loader.xml:
         class: AppBundle\Game\Loader\XmlFileLoader
-        public: false
+        lazy: true
+        toto: tata
 
     app.wordlist:
         class: AppBundle\Game\WordList

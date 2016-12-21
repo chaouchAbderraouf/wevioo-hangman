@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Contact;
 use AppBundle\Form\ContactType;
 use AppBundle\Service\ContactService;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -14,13 +15,23 @@ class DefaultController extends Controller
 {
     /**
      * @Route("/", name="homepage")
+     * @Cache(smaxage="10")
      */
     public function indexAction(Request $request)
     {
+
         // replace this example code with whatever you need
         return $this->render('default/index.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
         ]);
+    }
+
+    /**
+     * @Route("/fragment/somevariablecontent", name="fragment_somevariablecontent")
+     */
+    public function someVariableContentAction()
+    {
+        return $this->render('fragments/someVariableContent.html.twig');
     }
 
     /**
@@ -41,7 +52,7 @@ class DefaultController extends Controller
         $form = $this->createForm(ContactType::class, $contact);
 
         $form->handleRequest($request);
-
+        $this->get('security.authentication_utils')->getLastUsername();
         if ($form->isSubmitted() && $form->isValid()) {
             $this->get('app.contact_service')->sendMail($contact);
 
@@ -49,7 +60,6 @@ class DefaultController extends Controller
 
             return $this->redirectToRoute('game_home');
         }
-
         return $this->render('default/contact.html.twig', [
             'form' => $form->createView(),
         ]);
