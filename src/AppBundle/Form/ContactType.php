@@ -6,6 +6,7 @@ use AppBundle\Entity\Contact;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -27,7 +28,7 @@ class ContactType extends AbstractType
             ->add('message', TextareaType::class, ['label' => 'contact.message', 'required' => false])
         ;
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'countryListListener']);
+        $builder->addEventListener(FormEvents::POST_SET_DATA, [$this, 'countryListListener']);
         $builder->addEventListener(FormEvents::PRE_SUBMIT, [$this, 'countryListListener']);
     }
 
@@ -40,7 +41,6 @@ class ContactType extends AbstractType
 
     public function countryListListener(FormEvent $event)
     {
-        dump('im here');
         $choices = $this->getCountriesByZone($event->getData());
         $event->getForm()
             ->add('country', ChoiceType::class, ['choices' => $choices, 'mapped'=>false]);

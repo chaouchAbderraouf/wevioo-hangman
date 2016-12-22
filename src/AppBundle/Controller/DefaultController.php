@@ -9,6 +9,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
@@ -55,7 +57,9 @@ class DefaultController extends Controller
     {
         $isAjax = $request->isXmlHttpRequest();
         $form = $this->createForm(ContactType::class, [], ['attr' => ['id'=>'contact-form']]);
+        // $form->add('next', SubmitType::class);
         $form->handleRequest($request);
+        //if($form->get('next')->isClicked())
         $this->get('security.authentication_utils')->getLastUsername();
         if (!$isAjax && $form->isSubmitted() && $form->isValid()) {
             //$this->get('app.contact_service')->sendMail($form);
@@ -67,7 +71,7 @@ class DefaultController extends Controller
 
         $template = 'default/contact.html.twig';
         if($isAjax) {
-            $template = 'fragments/contact.html.twig';
+            return new JsonResponse($form->get('country')->getConfig()->getOption('chocies'));
         }
 
         return $this->render($template, [

@@ -13,7 +13,11 @@
     <script>
         $(document).on('change', '#{{ form.zone.vars.id }}', function(){
             $.post("{{ path('contact') }}", $('form[name="{{ form.vars.id }}"]').serializeArray(), function(data){
-                $('#form-contact').html(data)
+                content = '';
+                for(i in data) {
+                    content += '<option>'+data[i]+'</option>'
+                }
+                $('#{{ form.country.vars.id }}').html(content);
             })
         });
 
