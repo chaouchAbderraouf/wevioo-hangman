@@ -53,19 +53,24 @@ class DefaultController extends Controller
      */
     public function contactAction(Request $request)
     {
-        $contact = new Contact();
-        $form = $this->createForm(ContactType::class, $contact);
-
+        $isAjax = $request->isXmlHttpRequest();
+        $form = $this->createForm(ContactType::class, [], ['attr' => ['id'=>'contact-form']]);
         $form->handleRequest($request);
         $this->get('security.authentication_utils')->getLastUsername();
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->get('app.contact_service')->sendMail($contact);
+        if (!$isAjax && $form->isSubmitted() && $form->isValid()) {
+            //$this->get('app.contact_service')->sendMail($form);
 
             $this->addFlash('notice', 'Your request has been successfully sent.');
 
-            return $this->redirectToRoute('game_home');
+            //return $this->redirectToRoute('game_home');
         }
-        return $this->render('default/contact.html.twig', [
+
+        $template = 'default/contact.html.twig';
+        if($isAjax) {
+            $template = 'fragments/contact.html.twig';
+        }
+
+        return $this->render($template, [
             'form' => $form->createView(),
         ]);
     }

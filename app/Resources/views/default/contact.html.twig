@@ -7,8 +7,16 @@
 {% endblock %}
 
 {% block content %}
-    {{ form_start(form) }}
-        {{ form_rest(form) }}
-        <button type="submit">{{ 'contact.submit'|trans }}</button>
-    {{ form_end(form) }}
+    <div id="form-contact">
+        {% include('fragments/contact.html.twig') %}
+    </div>
+    <script>
+        $(document).on('change', '#{{ form.zone.vars.id }}', function(){
+            $.post("{{ path('contact') }}", $('form[name="{{ form.vars.id }}"]').serializeArray(), function(data){
+                $('#form-contact').html(data)
+            })
+        });
+
+
+    </script>
 {% endblock %}
