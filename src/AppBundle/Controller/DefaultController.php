@@ -19,11 +19,16 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-
-        // replace this example code with whatever you need
-        return $this->render('default/index.html.twig', [
+        $stopwatch = $this->get('debug.stopwatch');
+        $stopwatch->start('DefaultController::indexAction - render');
+        $response = $this->render('default/index.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
         ]);
+        $stopwatch->stop('DefaultController::indexAction - render');
+
+
+        // replace this example code with whatever you need
+        return $response;
     }
 
     /**

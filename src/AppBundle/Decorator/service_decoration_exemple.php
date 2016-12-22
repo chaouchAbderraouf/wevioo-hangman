@@ -15,9 +15,9 @@
 class DecoratingMailer implements MailerInterface
 {
 
-__construct(Mailer $mailer, LoggerInterface $logger) {
-$this->mailer = $mailer;
-
+    public function __construct(Mailer $mailer, LoggerInterface $logger) {
+        $this->mailer = $mailer;
+    }
     public function send($to, $content){
         $content .= 'Sended by Sami.';
         $this->mailer->send($to, $content);

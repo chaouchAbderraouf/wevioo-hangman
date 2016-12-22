@@ -2,17 +2,18 @@ services:
     app.wordlist_loader.txt:
         class: AppBundle\Game\Loader\TextFileLoader
         lazy: true
+        tags:
+            - {name: app.wordlist.loader, type: txt}
 
     app.wordlist_loader.xml:
         class: AppBundle\Game\Loader\XmlFileLoader
         lazy: true
-        toto: tata
+        tags:
+            - {name: app.wordlist.loader, type: xml}
 
     app.wordlist:
         class: AppBundle\Game\WordList
         calls:
-            - [addLoader, ['txt', '@app.wordlist_loader.txt']]
-            - [addLoader, ['xml', '@app.wordlist_loader.xml']]
             - [loadDictionaries, [['%kernel.root_dir%/Resources/data/words.txt', '%kernel.root_dir%/Resources/data/words.xml' ]]]
         shared: false
 
